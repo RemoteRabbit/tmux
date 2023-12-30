@@ -44,11 +44,11 @@ This should bring up a screen in tmux and show that it's installing the plugins.
 
 | Name | Description |
 | ---- | ----------- |
-| tmux-plugins/tpm | Plugin manager of Tmux |
-| christoomey/vim-tmux-navigator | Adds in vim movement commands to move around tmux sessions/windows/tabs/panes |
-| catppuccin/tmux | My favorite colorscheme, with this I use the mocha flavor |
-| tmux-plugins/tmux-resurrect | Allow you to return to a tmux session even after computer restart |
-| tmux-plugins/tmux-continuum | Works in tandum with resurrevt to add in autosaves to keep plugins list |
+| [tmux-plugins/tpm](https://github.com/tmux-plugins/tpm) | Plugin manager of Tmux |
+| [christoomey/vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator) | Adds in vim movement commands to move around tmux sessions/windows/tabs/panes |
+| [catppuccin/tmux](https://github.com/catppuccin/tmux) | My favorite colorscheme, with this I use the mocha flavor |
+| [tmux-plugins/tmux-resurrect](https://github.com/tmux-plugins/tmux-resurrect) | Allow you to return to a tmux session even after computer restart |
+| [tmux-plugins/tmux-continuum](https://github.com/tmux-plugins/tmux-continuum) | Works in tandum with resurrevt to add in autosaves to keep plugins list |
 
 ## Notes
 
