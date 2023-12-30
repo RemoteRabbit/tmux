@@ -37,8 +37,19 @@ I use [TPM](https://github.com/tmux-plugins/tpm) (Tmux Package Manager) to handl
 
 ### How to get started
 
+Once you have the repo pulled and setup you'll need to install the plugins. This can be done by `<prefix>I` as a reminder the `prefix` is changed in this setup to `<CTRL>a`.
+This should bring up a screen in tmux and show that it's installing the plugins.
+
 ### What each plugin is for
+
+| Name | Description |
+| ---- | ----------- |
+| tmux-plugins/tpm | Plugin manager of Tmux |
+| christoomey/vim-tmux-navigator | Adds in vim movement commands to move around tmux sessions/windows/tabs/panes |
+| catppuccin/tmux | My favorite colorscheme, with this I use the mocha flavor |
+| tmux-plugins/tmux-resurrect | Allow you to return to a tmux session even after computer restart |
+| tmux-plugins/tmux-continuum | Works in tandum with resurrevt to add in autosaves to keep plugins list |
 
 ## Notes
 
-- [ ] Finish the docs
+- Prefix is remapped to `<CTRL>a`
