@@ -56,17 +56,13 @@ This should bring up a screen in tmux and show that it's installing the plugins.
 
 | Name | Description |
 | ---- | ----------- |
-| [27medkamal/tmux-session-wizard](https://github.com/27medkamal/tmux-session-wizard) | Works with zoxide and fzf to replace the session manager to
-more easily create and manage sessions |
+| [27medkamal/tmux-session-wizard](https://github.com/27medkamal/tmux-session-wizard) | Works with zoxide and fzf to replace the session manager to more easily create and manage sessions |
 | [b0o/tmux-autoreload](https://github.com/b0o/tmux-autoreload) | Used to automatically reload `tmux.conf` upon change |
 | [catppuccin/tmux](https://github.com/catppuccin/tmux) | My favorite colorscheme, with this I use the mocha flavor |
-| [christoomey/vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator) | Adds in vim movement commands to move around tmux
-sessions/windows/tabs/panes |
-| [jaclu/tmux-power-zoom](https://github.com/jaclu/tmux-power-zoom) | Similar to ZenMode from nvim, allows you to toggle zoom into an individual
-pane |
+| [christoomey/vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator) | Adds in vim movement commands to move around tmux sessions/windows/tabs/panes |
+| [jaclu/tmux-power-zoom](https://github.com/jaclu/tmux-power-zoom) | Similar to ZenMode from nvim, allows you to toggle zoom into an individual pane |
 | [MaximilianGaedig/tmux-filter](https://github.com/MaximilianGaedig/tmux-filter) | A Grep style search for tmux |
-| [tmux-plugins/tmux-continuum](https://github.com/tmux-plugins/tmux-continuum) | Works in tandum with resurrevt to add in autosaves to keep plugins
-list |
+| [tmux-plugins/tmux-continuum](https://github.com/tmux-plugins/tmux-continuum) | Works in tandum with resurrevt to add in autosaves to keep plugins list |
 | [tmux-plugins/tmux-resurrect](https://github.com/tmux-plugins/tmux-resurrect) | Allow you to return to a tmux session even after computer restart |
 | [tmux-plugins/tpm](https://github.com/tmux-plugins/tpm) | Plugin manager of Tmux |
 
