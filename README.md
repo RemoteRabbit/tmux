@@ -31,6 +31,17 @@ git clone https://github.com/remoterabbit/tmux $HOME/.config
 rm -rf $HOME/.config/tmux/.git
 ```
 
+## Keymaps
+
+| Key | What it do |
+| --- | ---------- |
+| Ctrl + a | prefix |
+| Prefix + alt + u | TPM auto uninstall |
+| Prefix + I | TPM install |
+| Prefix + F | Tmux Filter/grep |
+| Prefix + z | Zoom in/out of pane |
+| Prefix + s | Session wizard with zoxide |
+
 ## Plugins (TPM)
 
 I use [TPM](https://github.com/tmux-plugins/tpm) (Tmux Package Manager) to handle all my package install and update needs.
@@ -51,5 +62,3 @@ This should bring up a screen in tmux and show that it's installing the plugins.
 | [tmux-plugins/tmux-continuum](https://github.com/tmux-plugins/tmux-continuum) | Works in tandum with resurrevt to add in autosaves to keep plugins list |
 
 ## Notes
-
-- Prefix is remapped to `<CTRL>a`
