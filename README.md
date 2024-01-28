@@ -8,26 +8,26 @@ This repo is home to my config setup for tmux. It is always changing and almost 
 
 ```shell
 mkdir -p $HOME/repos/personal
-git clone https://github.com/remoterabbit/tmux $HOME/repos/personal
+git clone --recurse-submodules -j8 https://github.com/remoterabbit/tmux $HOME/repos/personal
 ln -sf $HOME/repos/personal/tmux $HOME/.config
 ```
 
 ### Classic
 
 ```shell
-git clone https://github.com/remoterabbit/tmux
+git clone --recurse-submodules -j8 https://github.com/remoterabbit/tmux
 ```
 
 ### Classic with placement
 
 ```shell
-git clone https://github.com/remoterabbit/tmux $HOME/.config/
+git clone --recurse-submodules -j8 https://github.com/remoterabbit/tmux $HOME/.config/
 ```
 
 ### No Git Please
 
 ```shell
-git clone https://github.com/remoterabbit/tmux $HOME/.config
+git clone --recurse-submodules -j8 https://github.com/remoterabbit/tmux $HOME/.config
 rm -rf $HOME/.config/tmux/.git
 ```
 
@@ -41,6 +41,8 @@ rm -rf $HOME/.config/tmux/.git
 | Prefix + F | Tmux Filter/grep |
 | Prefix + z | Zoom in/out of pane |
 | Prefix + s | Session wizard with zoxide |
+| Prefix + <C+r> | Manually restore from resurect |
+| Prefix + <C+s> | Manually save for resurect |
 
 ## Plugins (TPM)
 
@@ -48,9 +50,7 @@ I use [TPM](https://github.com/tmux-plugins/tpm) (Tmux Package Manager) to handl
 
 ### How to get started
 
-Once you have the repo pulled and setup you'll need to install the plugins. This can be done by `<prefix>I` as a reminder the `prefix` is changed in
-this setup to `<CTRL>a`.
-This should bring up a screen in tmux and show that it's installing the plugins.
+Once you have the repo pulled and setup you'll need to install the plugins. This can be done by `<prefix> + I`
 
 ### What each plugin is for
 
@@ -67,3 +67,6 @@ This should bring up a screen in tmux and show that it's installing the plugins.
 | [tmux-plugins/tpm](https://github.com/tmux-plugins/tpm) | Plugin manager of Tmux |
 
 ## Notes
+
+- [Tmux Cheat Sheet](https://tmuxcheatsheet.com/)
+- [Awesome Tmux](https://github.com/rothgar/awesome-tmux)
