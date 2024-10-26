@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+# Colors and formatting
+BOLD='\033[1m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PACKAGES="entr tmux"
+CONFIG_DIR="$HOME/.config"
+TMUX_CONFIG_DIR="$CONFIG_DIR/tmux"
+BACKUP_DIR="$CONFIG_DIR/.backup/tmux"
+
+# Print formatted messages
+print_step() {
+    echo -e "${BLUE}==>${NC} ${BOLD}$1${NC}"
+}
+
+print_success() {
+    echo -e "${GREEN}✓${NC} $1"
+}
+
+# Create required directories
+print_step "Setting up directories..."
+mkdir -p "$BACKUP_DIR"
+mkdir -p "$TMUX_CONFIG_DIR/plugins"
+
+# Detect and setup OS-specific packages
+print_step "Detecting operating system and installing packages..."
+if [ "$(uname)" == "Darwin" ]; then
+    print_step "macOS detected"
+    if ! command -v brew >/dev/null 2>&1; then
+        print_step "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+    brew install $PACKAGES
+    print_success "Packages installed via Homebrew"
+elif [ -f "/etc/arch-release" ]; then
+    print_step "Arch Linux detected"
+    sudo pacman -Sy --needed $PACKAGES
+    print_success "Packages installed via pacman"
+fi
+
+# Backup existing configuration
+if [ -f "$TMUX_CONFIG_DIR/.tmux.conf" ]; then
+    print_step "Backing up existing configuration..."
+    mv "$TMUX_CONFIG_DIR/.tmux.conf" "$BACKUP_DIR/.tmux.conf.$(date +%Y%m%d_%H%M%S)"
+    print_success "Backup created"
+fi
+
+# Create symlink
+print_step "Creating symlinks..."
+ln -sf "$SCRIPT_DIR/.tmux.conf" "$TMUX_CONFIG_DIR/.tmux.conf"
+print_success "Symlinks created"
+
+# Install TPM
+if [ ! -d "$TMUX_CONFIG_DIR/plugins/tpm" ]; then
+    print_step "Installing Tmux Plugin Manager..."
+    git clone https://github.com/tmux-plugins/tpm "$TMUX_CONFIG_DIR/plugins/tpm"
+    print_success "TPM installed"
+fi
+
+# Final success message
+echo -e "\n${GREEN}${BOLD}✨ Installation Complete!${NC}"
+echo -e "${BOLD}🚀 Next steps:${NC}"
+echo -e "   1. Start tmux with ${BOLD}tmux${NC}"
+echo -e "   2. Install plugins with ${BOLD}prefix + I${NC}"
+
