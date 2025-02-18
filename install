@@ -4,14 +4,15 @@
 BOLD='\033[1m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
+RED='\033[0;31m'
 
 # Script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PACKAGES="entr tmux"
 CONFIG_DIR="$HOME/.config"
 TMUX_CONFIG_DIR="$CONFIG_DIR/tmux"
-BACKUP_DIR="$CONFIG_DIR/.backup/tmux"
+BACKUP_DIR="$CONFIG_DIR/.backup/tmux/$(date +%Y%m%d_%H%M%S)"
 
 # Print formatted messages
 print_step() {
@@ -22,49 +23,89 @@ print_success() {
     echo -e "${GREEN}✓${NC} $1"
 }
 
-# Create required directories
-print_step "Setting up directories..."
-mkdir -p "$BACKUP_DIR"
+print_error() {
+    echo -e "${RED}✗${NC} $1"
+    exit 1
+}
 
-# Detect and setup OS-specific packages
-print_step "Detecting operating system and installing packages..."
-if [ "$(uname)" == "Darwin" ]; then
-    print_step "macOS detected"
-    if ! command -v brew >/dev/null 2>&1; then
-        print_step "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    brew install $PACKAGES
-    print_success "Packages installed via Homebrew"
-elif [ -f "/etc/arch-release" ]; then
-    print_step "Arch Linux detected"
-    sudo pacman -Sy --needed $PACKAGES
-    print_success "Packages installed via pacman"
-elif [ -f "/etc/apt" ]; then
-    print_step "Debian Linux detected"
-    sudo apt install $PACKAGES
-    print_success "Packages installed via apt"
-fi
+# Check for required commands
+check_dependencies() {
+    print_step "Checking dependencies..."
+    for cmd in git curl; do
+        if ! command -v "$cmd" &> /dev/null; then
+            print_error "$cmd is required but not installed"
+        fi
+    done
+}
+
+# Create required directories
+setup_directories() {
+    print_step "Setting up directories..."
+    mkdir -p "$BACKUP_DIR" || print_error "Failed to create backup directory"
+    print_success "Directories created"
+}
+
+# Install packages based on OS
+install_packages() {
+    print_step "Detecting operating system and installing packages..."
+    OS=$(uname -s)
+    case "$OS" in
+        Darwin)
+            print_step "macOS detected"
+            if ! command -v brew >/dev/null 2>&1; then
+                print_step "Installing Homebrew..."
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            fi
+            brew install $PACKAGES || print_error "Failed to install packages via Homebrew"
+            ;;
+        Linux)
+            if [ -f "/etc/arch-release" ]; then
+                print_step "Arch Linux detected"
+                sudo pacman -Sy --needed $PACKAGES || print_error "Failed to install packages via pacman"
+            elif [ -d "/etc/apt" ]; then
+                print_step "Debian-based Linux detected"
+                sudo apt update && sudo apt install -y $PACKAGES || print_error "Failed to install packages via apt"
+            else
+                print_error "Unsupported Linux distribution"
+            fi
+            ;;
+        *)
+            print_error "Unsupported operating system: $OS"
+            ;;
+    esac
+    print_success "Packages installed successfully"
+}
 
 # Backup existing configuration
-if [ -f "$TMUX_CONFIG_DIR/.tmux.conf" ]; then
-    print_step "Backing up existing configuration..."
-    mv "$TMUX_CONFIG_DIR/.tmux.conf" "$BACKUP_DIR/.tmux.conf.$(date +%Y%m%d_%H%M%S)"
-    print_success "Backup created"
-fi
+backup_config() {
+    if [ -d "$TMUX_CONFIG_DIR" ]; then
+        print_step "Backing up existing configuration..."
+        cp -r "$TMUX_CONFIG_DIR" "$BACKUP_DIR" || print_error "Failed to backup configuration"
+        rm -rf "$TMUX_CONFIG_DIR"
+        print_success "Backup created at $BACKUP_DIR"
+    fi
+}
 
-# Install TPM
-git -C $SCRIPT_DIR submodule init
-git -c $SCRIPT_DIR submodule update
+# Install TPM and create symlinks
+setup_tmux() {
+    print_step "Setting up Tmux configuration..."
+    git -C "$SCRIPT_DIR" submodule init && git -C "$SCRIPT_DIR" submodule update || print_error "Failed to initialize submodules"
+    ln -sf "$SCRIPT_DIR" "$TMUX_CONFIG_DIR" || print_error "Failed to create symlink"
+    print_success "Tmux configuration installed"
+}
 
-# Create symlink
-print_step "Creating symlinks..."
-ln -sf "$SCRIPT_DIR" "$TMUX_CONFIG_DIR"
-print_success "Symlinks created"
+main() {
+    check_dependencies
+    setup_directories
+    install_packages
+    backup_config
+    setup_tmux
 
-# Final success message
-echo -e "\n${GREEN}${BOLD}✨ Installation Complete!${NC}"
-echo -e "${BOLD}🚀 Next steps:${NC}"
-echo -e "   1. Start tmux with ${BOLD}tmux${NC}"
-echo -e "   2. Install plugins with ${BOLD}prefix + I${NC}"
+    echo -e "\n${GREEN}${BOLD}✨ Installation Complete!${NC}"
+    echo -e "${BOLD}🚀 Next steps:${NC}"
+    echo -e "   1. Start tmux with ${BOLD}tmux${NC}"
+    echo -e "   2. Install plugins with ${BOLD}prefix + I${NC}"
+    echo -e "   3. Previous config backed up at ${BOLD}$BACKUP_DIR${NC} (if existed)"
+}
 
+main
